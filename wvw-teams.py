@@ -76,17 +76,15 @@ def fetch_guild_data_local(alliances_file: str = "WvW Guilds - Alliances.csv",
     return alliances, solo_guilds
 
 
-def build_guild_embeds(world_name: str, sorted_alliances: pd.DataFrame, sorted_solo_guilds: pd.DataFrame) -> List[dict]:
+def build_guild_embeds(world_name: str, alliances: pd.DataFrame, solo_guilds: pd.DataFrame) -> List[dict]:
     """Build embeds for a world, auto-splitting alliances if too long."""
     alliance_blocks = []
-    for alliance, guilds in sorted_alliances.iterrows():
-        if guilds['World ID'] == world_name:
-        #for tag, guilds in alliances.items():
-            block_lines = [f"**{guilds['Alliance:']}**"]  # alliance name
-            alliance_guild_list = guilds['Guilds'].split("\n")
-            for guild in alliance_guild_list:
-                block_lines.append(f"-  {guild}")
-            alliance_blocks.append("\n".join(block_lines))
+    for index, row in alliances.iterrows():
+        block_lines = [f"**{row['Alliance:']}**"]  # alliance name
+        alliance_guild_list = row['Guilds'].split("\n")
+        for guild in alliance_guild_list:
+            block_lines.append(f"-  {guild}")
+        alliance_blocks.append("\n".join(block_lines))
 
     embeds, current_alliances, current_length = [], [], 0
     for block in alliance_blocks:
@@ -103,7 +101,7 @@ def build_guild_embeds(world_name: str, sorted_alliances: pd.DataFrame, sorted_s
     # Attach solo guilds to last embed
     if embeds:
         world_solo_guilds = []
-        for solo_index, solo_row in sorted_solo_guilds.iterrows():
+        for solo_index, solo_row in solo_guilds.iterrows():
             if solo_row['World'] == world_name:
                 world_solo_guilds.append(solo_row['Solo Guilds'])
         solo_text = "\n".join(world_solo_guilds) if world_solo_guilds else "None"
@@ -191,10 +189,12 @@ if __name__ == "__main__":
     world_list = sorted_alliances['World ID'].unique().tolist()
 
     #build_discord_embeds(sorted_alliances, sorted_solo_guilds)
-    for world in world_list:
-        embeds = build_guild_embeds(world, sorted_alliances, sorted_solo_guilds)
-        link = post_embeds_and_get_links(WEBHOOK_URL, GUILD_ID, world, embeds)
-        world_links[world] = link
+    for world_name in world_list:
+        filtered_alliances = sorted_alliances.loc[sorted_alliances['World ID'] == world_name]
+        filtered_solo_guilds = sorted_solo_guilds.loc[sorted_solo_guilds['World'] == world_name]
+        embeds = build_guild_embeds(world_name, sorted_alliances, sorted_solo_guilds)
+        link = post_embeds_and_get_links(WEBHOOK_URL, GUILD_ID, world_name, embeds)
+        world_links[world_name] = link
         time.sleep(0.5)
 
     # Post the summary embed
