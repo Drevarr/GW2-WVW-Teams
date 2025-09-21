@@ -26,7 +26,20 @@ def fetch_north_american_guilds():
         print(f"Error: {error}")
         return None
     
-    
+
+def fetch_match_data(match):
+    """Fetch match data for a given tier from GW2API.
+    Example: NA_wvw_matches = ['1-1', '1-2', '1-3', '1-4']"""
+    url = f'https://api.guildwars2.com/v2/wvw/matches/{match}'
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as error:
+        print(f"Error: {error}")
+        return None
+
+
 def fetch_guild_data(cache_dir: str = "cache", ttl: int = 3600, retries: int = 3, delay: float = 2.0):
     """
     Fetches data from the 'Alliances' and 'SoloGuilds' worksheets of the WvW Guilds Google Spreadsheet.
