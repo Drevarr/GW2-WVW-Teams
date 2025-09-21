@@ -2,7 +2,7 @@ import configparser
 from datetime import datetime, timezone
 import os
 import time
-from typing import List
+from typing import List, Tuple
 import urllib.error
 
 import pandas as pd
@@ -12,17 +12,31 @@ import requests
 MAX_FIELD_CHARS = 1024
 
 
-def fetch_north_american_guilds():
-    """Fetch listing of North American Guilds from GW2API."""
+def fetch_north_american_guilds() -> dict:
+    """
+    Fetch the listing of North American Guilds from the Guild Wars 2 API.
+
+    The GW2API is queried for the list of North American Guilds. The response is
+    parsed as JSON and returned as a Python dictionary.
+
+    Parameters:
+        None
+
+    Returns:
+        dict: The list of North American Guilds as returned by the GW2API.
+    """
     url = "https://api.guildwars2.com/v2/wvw/guilds/na"
     try:
-        response = requests.get(url, timeout=(3.05, 5))
+        # Send a GET request to the GW2API with a timeout of 3.0 seconds
+        response = requests.get(url, timeout=(3.0, 5))
+        # Raise an exception for bad status codes
         response.raise_for_status()
+        # Parse the JSON response
         data = response.json()
         return data
-        #json.loads(response.json())
         
     except requests.exceptions.RequestException as error:
+        # Print an error message if the request fails
         print(f"Error: {error}")
         return None
     
@@ -106,10 +120,37 @@ def fetch_guild_data_local(alliances_file: str = "WvW Guilds - Alliances.csv",
     return alliances, solo_guilds
 
 
-def update_guild_data(alliances, solo_guilds, guilds_api_data):
-    # TODO implement comparison of alliances and solo_guilds to current api data
-    # to ensure the latest world_id mapping is used
-    pass
+def update_world_ids(alliances_df: pd.DataFrame, solo_guilds_df: pd.DataFrame, guild_world_ids: dict) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Updates the world IDs in the alliances and solo guilds dataframes
+    based on the latest world ID mapping from the Guild Wars 2 API.
+
+    Args:
+        alliances_df (pd.DataFrame): DataFrame containing alliances data.
+        solo_guilds_df (pd.DataFrame): DataFrame containing solo guilds data.
+        guild_world_ids (dict): Dictionary containing the latest world ID mapping.
+
+    Returns:
+        Tuple[pd.DataFrame, pd.DataFrame]: Updated dataframes for alliances and solo guilds.
+    """
+    for index, row in alliances_df.iterrows():
+        alliance_id = row['Alliance Guild IDs:'].upper()
+        current_world_id = row['World ID']
+        new_world_id = guild_world_ids.get(alliance_id, "Unknown")
+
+        if new_world_id != current_world_id:
+            alliances_df.at[index, 'World ID'] = new_world_id
+
+    for index, row in solo_guilds_df.iterrows():
+        guild_id = row['Guild API ID'].upper()
+        current_world_id = row['World']
+        new_world_id = guild_world_ids.get(guild_id, "Unknown")
+
+        if new_world_id != current_world_id:
+            solo_guilds_df.at[index, 'World'] = new_world_id
+
+    return alliances_df, solo_guilds_df
+
 
 def build_guild_embeds(world_name: str, alliances: pd.DataFrame, solo_guilds: pd.DataFrame) -> List[dict]:
     """Build embeds for a world, auto-splitting alliances if too long."""
