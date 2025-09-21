@@ -3,9 +3,10 @@ from datetime import datetime, timezone
 import os
 import time
 from typing import List
-import requests
-import pandas as pd
 import urllib.error
+
+import pandas as pd
+import requests
 
 
 MAX_FIELD_CHARS = 1024
