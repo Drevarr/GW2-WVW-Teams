@@ -63,7 +63,7 @@ It organizes data by **World IDs**, **Alliances**, **Alliance Guilds**, and **So
 
     Example Output:
 
-    [![Alt text](WvW-Teams-Embed.png)]
+    [![Alt text](WvW-Teams-Embed.png)] [![Alt text](wvw-teams-summary.png)]
 
 
 ## Requirements
