@@ -11,6 +11,22 @@ import requests
 
 MAX_FIELD_CHARS = 1024
 
+
+def fetch_north_american_guilds():
+    """Fetch listing of North American Guilds from GW2API."""
+    url = "https://api.guildwars2.com/v2/wvw/guilds/na"
+    try:
+        response = requests.get(url, timeout=(3.05, 5))
+        response.raise_for_status()
+        data = response.json()
+        return data
+        #json.loads(response.json())
+        
+    except requests.exceptions.RequestException as error:
+        print(f"Error: {error}")
+        return None
+    
+    
 def fetch_guild_data(cache_dir: str = "cache", ttl: int = 3600, retries: int = 3, delay: float = 2.0):
     """
     Fetches data from the 'Alliances' and 'SoloGuilds' worksheets of the WvW Guilds Google Spreadsheet.
