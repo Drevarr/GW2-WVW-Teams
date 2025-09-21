@@ -106,6 +106,11 @@ def fetch_guild_data_local(alliances_file: str = "WvW Guilds - Alliances.csv",
     return alliances, solo_guilds
 
 
+def update_guild_data(alliances, solo_guilds, guilds_api_data):
+    # TODO implement comparison of alliances and solo_guilds to current api data
+    # to ensure the latest world_id mapping is used
+    pass
+
 def build_guild_embeds(world_name: str, alliances: pd.DataFrame, solo_guilds: pd.DataFrame) -> List[dict]:
     """Build embeds for a world, auto-splitting alliances if too long."""
     alliance_blocks = []
