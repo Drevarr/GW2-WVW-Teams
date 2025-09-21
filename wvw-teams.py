@@ -41,15 +41,28 @@ def fetch_north_american_guilds() -> dict:
         return None
     
 
-def fetch_match_data(match):
-    """Fetch match data for a given tier from GW2API.
-    Example: NA_wvw_matches = ['1-1', '1-2', '1-3', '1-4']"""
+def fetch_match_data(match: str) -> dict:
+    """
+    Fetch match data for a given tier from GW2API.
+
+    Parameters:
+        match (str): The match ID to fetch data for. Example: '1-1'
+
+    Returns:
+        dict: The match data as returned by the GW2API. None if the request fails.
+    """
+    # Construct the URL for the match data request
     url = f'https://api.guildwars2.com/v2/wvw/matches/{match}'
+
     try:
+        # Send a GET request to the GW2API with no timeout
         response = requests.get(url)
+        # Raise an exception for bad status codes
         response.raise_for_status()
+        # Parse the JSON response
         return response.json()
     except requests.exceptions.RequestException as error:
+        # Print an error message if the request fails
         print(f"Error: {error}")
         return None
 
@@ -163,16 +176,21 @@ def build_guild_embeds(world_name: str, alliances: pd.DataFrame, solo_guilds: pd
         alliance_blocks.append("\n".join(block_lines))
 
     embeds, current_alliances, current_length = [], [], 0
+    part = 1  # track part numbers
     for block in alliance_blocks:
         block_len = len(block) + 2
         if current_length + block_len > MAX_FIELD_CHARS and current_alliances:
-            embeds.append(make_embed(world_name, "\n\n".join(current_alliances)))
+            # add previous chunk
+            title = world_name if part == 1 else f"{world_name} (part-{part})"
+            embeds.append(make_embed(title, "\n\n".join(current_alliances)))
+            part += 1
             current_alliances, current_length = [], 0
         current_alliances.append(block)
         current_length += block_len
 
     if current_alliances:
-        embeds.append(make_embed(world_name, "\n\n".join(current_alliances)))
+        title = world_name if part == 1 else f"{world_name} (part-{part})"
+        embeds.append(make_embed(title, "\n\n".join(current_alliances)))
 
     # Attach solo guilds to last embed
     if embeds:
