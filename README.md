@@ -55,11 +55,13 @@ It organizes data by **World IDs**, **Alliances**, **Alliance Guilds**, and **So
 1. Open a terminal and navigate to the script’s directory.
 2. Run:
     ```
-    python wvw-teams.py
+    python wvw-teams.py --local
+    or
+    python wvw-teams.py --remote
     ```
 
 
-    The script will process the CSV files, build embeds for each world, and post them to your Discord server.
+    The script will process the CSV files or google sheets, build embeds for each world, and post them to your Discord server.
 
     Example Output:
 
