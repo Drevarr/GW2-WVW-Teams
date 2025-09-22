@@ -77,14 +77,12 @@ def fetch_guild_data(cache_dir: str = "cache", ttl: int = 3600, retries: int = 3
     """
     os.makedirs(cache_dir, exist_ok=True)
 
-    sheet_id = "1Txjpcet-9FDVek6uJ0N3OciwgbpE0cfWozUK7ATfWx4"
-    sheets = {
-        "Alliances": "1294524185",
-        "SoloGuilds": "2062340450"
-    }
+    alliances_csv_url = "https://docs.google.com/spreadsheets/d/1Txjpcet-9FDVek6uJ0N3OciwgbpE0cfWozUK7ATfWx4/export?format=csv&gid=1120510750"
+    soloGuilds_csv_url = "https://docs.google.com/spreadsheets/d/1Txjpcet-9FDVek6uJ0N3OciwgbpE0cfWozUK7ATfWx4/export?format=csv&gid=768688698"
+
     urls = {
-        name: f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
-        for name, gid in sheets.items()
+        "Alliances": alliances_csv_url,
+        "SoloGuilds": soloGuilds_csv_url
     }
 
     results = {}
