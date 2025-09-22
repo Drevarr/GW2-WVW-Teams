@@ -1,0 +1,108 @@
+Solo Guilds,AP,DMP,DoT,DT,HoJ,LK,LC,MC,Moogooloo,MW,RR,CoB,ThroB,ToD,YH,(leave blank),Notes:,Guild API ID,API Mismatch,Shell Guild,World
+ 𝐒𝐨𝐥𝐨 𝐆𝐮𝐢𝐥𝐝𝐬,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,,Line Left Blank Intentially; Bold text used to sort at end of list,,False,False,
+[AI] - Angry Intent (NA),False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,,,cb2347e3-076f-438d-9c94-e53f0967a7e9,False,False,Throne of Balthazar
+[AI] - Anonymous Identîty,False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,,,4582ff4b-3f19-e611-80d4-e4115bdfcb5d,False,False,Throne of Balthazar
+[AR] - Anvil Resistance,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,b8746ff7-8f7c-e611-80d4-e4115beba648,False,False,Abaddon's Prison
+[ASK] - Asuran Siege Krewe (SEA),False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,e2b6ba50-a190-e411-be98-e4115bdfc985,True,False,
+[BAEL] - La Babilonia De Elona,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,,,931fae24-fcb3-e811-81aa-a77aa130eab8,False,False,Domain of Torment
+[bake] - Thebakery (late NA) (pugmander),False,False,False,False,True,False,False,False,False,False,False,False,False,False,False,,,A8F6A9A5-CBD2-4784-8CE7-08781562B4B1,False,False,Hall of Judgment
+[Bana] - Bellicose Banana Club (SEA),False,False,False,False,True,False,False,False,False,False,False,False,False,False,False,,,567d4883-1244-43cc-99ce-6bfa27f172ca,False,False,Hall of Judgment
+[BEAR] - Bears Evolve in the Arcane Room (SEA),False,False,False,False,False,False,False,False,True,False,False,False,False,False,False,,,6696623B-C262-EA11-81AC-95DFE50946EB,False,False,Moogooloo
+[BoB] - Brotherhood of Bogans (OCX),False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,,,A73AF6AD-CCAD-E811-81AA-BEF9B8C3E82E,False,False,Dwayna's Temple
+[BOOK] - The Legend Of The Book,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,,,bfbc72cb-29a8-42e2-a392-672c8491a49c,False,False,Cathedral of Blood
+[BREW] - The Brewery (Late NA),False,False,False,False,False,False,True,False,False,False,False,False,False,False,False,,,1B94A772-F64A-4494-9463-479D0F216D30,False,False,Lutgardis Conservatory
+[BS] - The Broken Smiles ,False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,,,81e86467-eec4-e311-863c-e4115bdf481d,False,False,Tombs of Drascir
+[CAGE] - Charr In A (NA),False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,,,5bfca146-51a8-ef11-8465-02315ab41281,False,False,Dwayna's Temple
+[CHAT] - Cant Handle Anything (NA),False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,,,9A80D174-F71F-ED11-81A9-8FB5CFBE7766,False,False,Cathedral of Blood
+[CoSo] - Coso And Company Lol,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,9ea68292-494d-e911-81a8-a25fc8b1a2fe,True,False,
+[Crew] - Mischief Crew (OCX/SEA),False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,,10ish active members,71ab72fe-f629-43de-a9f9-d9062f8e89ed,False,False,Cathedral of Blood
+[Crew] - The Tides Of Tyria,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,,,0ab7068e-ad8d-ee11-8465-02315ab41281,False,False,Domain of Torment
+[CRTZ] - Critz N Gigglz,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,,"with DRGN, real GUID: 4453d586-1e9e-4004-ae68-46d30314378b",6a8c83fc-5e85-e811-81a8-90824340dec8,False,False,Cathedral of Blood
+[CTH] - Company of Traveling Heroes (NA),False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,,,d8aa9d4d-af60-482e-882c-857ac88c7ed8,False,False,Dwayna's Temple
+[CW] - Charr World,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,,,ab19d8de-23d4-ee11-81a9-8fb5cfbe7766,False,False,Mosswood
+[DFR] - Devonas Final Rest,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,1409db56-9a78-e611-80d4-e4115beba648,True,False,
+[DoC] - Dolyaks of Chaos (NA),False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,,,AB256636-FDA2-E311-8290-AC162DAE0BED,False,False,Tombs of Drascir
+[DOG] - Dog Biscuits (Late Sea Pugmander),False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,,,0230817E-FB36-E411-863C-E4115BDF481D,False,False,Cathedral of Blood
+[DRGN] - Spicy Lizards,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,,,6a8c83fc-5e85-e811-81a8-90824340dec8,False,False,Cathedral of Blood
+[Dry] - Name Censored,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,d7dbb3e1-9a8a-e511-a5a9-ac162dae5a05,True,False,
+[dT] - Dirty Tactics (SEA),False,False,False,False,False,False,False,False,False,False,False,False,False,False,True,,,b9d8c7c5-fab4-e611-80da-101f7433eead,False,False,Yohlon Haven
+[ECHO] - Echoes Of The Vanguard (NA),False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,,,5ba337c9-20aa-e311-a32a-e4115bdfa895,False,False,Domain of Torment
+[EcK] - Elite Contract Killers,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,,,2c26ca84-0510-4ad2-ba4e-682abc7e88b3,False,False,Dwayna's Temple
+[FAB] - Fabulously Fatal,False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,,previously OOK,0a1552e6-4449-e711-80d4-e4115be8e905,False,False,Throne of Balthazar
+[FEAR] - Fear Us Respect Us (NA),False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,,"No Info if solo, inactive or in an alliance",d18fa1bb-b8af-e311-bb46-80c16e7c6d65,True,False,Rall's Rest
+[FOE] - Foes Of Evil (SEA),False,False,False,False,False,False,False,False,True,False,False,False,False,False,False,,,6EFC32B8-1B0E-42E9-A4BE-2141E3426B9F,False,False,Moogooloo
+[FTL] - Flying Tortoises (NA),False,False,False,False,True,False,False,False,False,False,False,False,False,False,False,,,65a0e5d5-6518-eb11-81aa-a77aa130eab8,False,False,Hall of Judgment
+[GEM] - Diamond Coast (NA),False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,,,5E67B6EB-9A5F-E811-81A9-DC92C488388A,False,False,Tombs of Drascir
+[gods] - The Crazy Gods,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,,,7c0cf3b5-c87c-44a6-a104-37a7d82f61a1,False,False,Cathedral of Blood
+[Grim] - The Charr Empire (NA),False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,,,4995334b-048b-e311-a8e7-ac162dae5a05,False,False,Mosswood
+[GWIZ] - The Glizzard Wizards (NA/SEA),False,False,False,False,False,False,True,False,False,False,False,False,False,False,False,,,de2a8f9f-119e-ee11-ba1f-12061042b485,False,False,Lutgardis Conservatory
+[HK] - Hammer Kult (late OCX),False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,,,A8A72A6A-1E99-4FF2-80A4-A6F66F856BFE,False,False,Mosswood
+[HZRD] - Hazardous Guild,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,95708762-3c54-f011-81ac-95dfe50946eb,False,False,Abaddon's Prison
+[IoM] - Immortals of the Mîsts (NA),False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,,,dfcc36ea-31d3-eb11-81ac-95dfe50946eb,False,False,Tombs of Drascir
+[JOY] - Hairless Kitties Riding Duckies,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,,,6ea90a3d-737c-487c-a71d-c4cc4fb52f25,False,False,Dwayna's Temple
+[KAW] - Im A Flamingo Kaw Kaw Kaw (OCX),False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,de6f7508-3ff0-eb11-81b2-a840610878b3,True,False,
+[Kiwi] - Gamers World,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,,,089bcaca-3851-4474-8b63-8a1e99577596,False,False,Dwayna's Temple
+[KnF] - Kingy and Friends (OCX),False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,,"No Info if solo, inactive or in an alliance",4A873563-9C0F-E611-80D4-E4115BD19D24,True,False,Throne of Balthazar
+[KOHI] - Cafe Latte (SEA),False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,,,D68FDD21-DB39-EE11-8465-0228F2FB5E53,False,False,Domain of Torment
+[KSC] - Knights Of The Silver Chaliice (NA),False,False,False,False,False,False,True,False,False,False,False,False,False,False,False,,,EB6B6211-30DC-EC11-81A9-8FB5CFBE7766,False,False,Lutgardis Conservatory
+[LH] - Long Horizon (NA),False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,,,738FC52E-7155-E411-8290-AC162DAE0BED,False,False,Rall's Rest
+[LIFE] - Lag is for Everyone (NA),False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,,,719b92a7-8668-e811-81a9-dc92c488388a,False,False,Tombs of Drascir
+[Lord] - Legends Of Ravenous Destruction,False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,,,3922C5DC-B9EA-4A90-9B0E-03837609F34C,False,False,Tombs of Drascir
+[MDGN] - Mystic Dragon Slayers (OCX),False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,54bdae9a-c92d-ea11-81a8-a25fc8b1a2fe,True,False,
+[MERC] - Skritts Warband (early NA),False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,,,27aef31c-789d-e811-81a8-cde2ac1eed30,False,False,Tombs of Drascir
+[MINI] - Minis Of The Mists,False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,,,7D6EB084-3DFA-E311-A8E7-AC162DAE5A05,False,False,Throne of Balthazar
+[Mist] - Phantoms Of The,False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,,,016952a9-b3eb-46fd-b1b2-816fbb6930ec,False,False,Throne of Balthazar
+[Mist] - Rift Legion (NA),False,False,False,False,False,False,False,False,False,False,False,False,False,False,True,,,bf87ddd0-8634-e411-9621-ac162dae8acd,False,False,Yohlon Haven
+[MKN] - Guild Mikan,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,f96f64be-002a-4260-a03f-46671811a732,True,False,
+[MoV] - Mists Of Valhalla (OCX),False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,,,810D03F3-2B73-E511-A5A9-AC162DAE5A05,False,False,Dwayna's Temple
+[OATH] - Mistforged Oath,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,58abfa61-69b1-ef11-8465-068565e44296,True,False,
+[ODA] - Drifters Inc (SEA),False,False,False,False,False,False,False,False,False,False,False,False,False,False,True,,,BA866CE0-8CAA-E611-80DA-101F7433EEAD,False,False,Yohlon Haven
+[OhMy] - Swords Daggers And Bows (NA),False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,,,4291073c-bba5-e911-81aa-d66d0e22cab6,False,False,Rall's Rest
+[Öne] - Seen Us,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,b6bdb4c6-bd93-ef11-ba1f-124bd09c5957,True,False,
+[Pass] - We Are The Pass,False,False,False,False,False,False,False,False,False,False,False,False,False,False,True,,,A7615965-F86B-E611-80D3-AC162DC0847D,False,False,Yohlon Haven
+[PDF] - Pure Dragons Fire,False,False,False,False,True,False,False,False,False,False,False,False,False,False,False,,,B75EF3D9-8264-E411-A32A-E4115BDFA895,False,False,Hall of Judgment
+[PEKO] - Hololive (NA),False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,,,ce0aef10-21ad-ea11-81a8-a25fc8b1a2fe,False,False,Tombs of Drascir
+[PUNK] - Punks Renegades and Rebels (NA),False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,,,0C1DD467-34AE-4A81-9EC8-19853BB6FBBF,False,False,Mosswood
+[PvD] - No Sleep Only Door Fighting,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,,,f44183df-c9e0-ee11-81ab-f50023ee1bf3,False,False,Dwayna's Temple
+[Qi] - Quaggan Imperial Army,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,56D3FEB7-133E-E911-81A8-F161567B2263,False,False,Abaddon's Prison
+[Rear] - We enter from the (OCX),False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,,Missing from WvW API,4ace6ab9-9c7f-e911-81a8-83c7278578e0,False,False,Throne of Balthazar
+[RIP] - Really Into Partying (OCX),False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,A7A59406-CC8A-E611-80DA-101F7433AF15,True,False,
+[RISE] - From Ashes We (SEA),False,False,False,False,True,False,False,False,False,False,False,False,False,False,False,,,a0be4e0e-25de-4643-90a5-05356588227f,False,False,Hall of Judgment
+[ROG] - Rise Of The Guillotine (NA),False,False,False,False,False,False,True,False,False,False,False,False,False,False,False,,,d3f8e5ef-f00b-ee11-81b2-a840610878b3,False,False,Lutgardis Conservatory
+[RotA] - Ravens Of The Æther,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,e6095528-745e-ef11-81ab-f50023ee1bf3,False,False,Abaddon's Prison
+[SB] - Sanctus Bellatorum,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,5974F96B-295B-4A38-A1F9-DC2D17EEC497,False,False,Abaddon's Prison
+[SFC] - Sorrows Fight Club,False,False,False,False,False,False,False,False,False,False,False,False,False,False,True,,"No Info if solo, inactive or in an alliance",79c16574-e70c-ef11-ba1f-12061042b485,True,False,Yohlon Haven
+[Sin] - Frequent Sinners (NA),False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,3ACEB208-E9A7-E711-80DA-101F7433AF15,True,False,
+[SoX] - Standard of Heroes (OCX),True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,76d6654a-806a-4e77-ab4d-4f7661024d79,False,False,Abaddon's Prison
+[Srge] - Surging Malice,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,317db0aa-f179-e511-a3e6-ac162dc0e835,True,False,
+[SV] - Sanguis Veniet (NA),False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,,True,False,
+[SVAR] - Svartheim,,False,False,False,False,False,False,False,False,True,False,False,False,False,False,,,4999471a-112b-e811-81a1-020cab02238c,False,False,Mosswood
+[TFor] - The Forgers Of Orr,False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,,,5c247e88-43b4-4a83-944c-75cdd88124d2,False,False,Throne of Balthazar
+[TKx] - Top Knocx (NA),True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,ac271d9b-5a99-e411-8290-ac162dae0bed,False,False,Abaddon's Prison
+[TRBO] - Tribo (SEA),False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,,,7743C1B1-C287-4638-A864-D9EA19F230C2,False,False,Mosswood
+[Tree] - Top Tree House,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,1a49f040-83a9-e511-80d4-e4115beba648,False,False,Abaddon's Prison
+[TWR] - The Tower Society (NA),False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,Missing from WvW API,0400631d-cc23-ef11-ba1f-124bd09c5957,True,False,
+[ViP] - Vengeance is Pips (NA),False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,,,90EE62DE-B813-EF11-BA1F-12061042B485,False,False,Throne of Balthazar
+[YAWN] - Great Content,False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,,,abe7e868-b53b-e711-80d4-e4115be8e905,False,False,Tombs of Drascir
+[YEET] - Quagganic Order of the Sacred,False,False,False,False,False,False,False,False,False,False,False,False,False,False,True,,,378a1947-bbb4-ef11-8465-02315ab41281,False,False,Yohlon Haven
+[zero] - Organization Zero,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,,,31f7316c-b983-44db-aa3c-e0fa9b52c13d,False,False,Dwayna's Temple
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,
+,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,,,,False,False,

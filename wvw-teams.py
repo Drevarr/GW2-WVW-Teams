@@ -1,6 +1,8 @@
+import argparse
 import configparser
 from datetime import datetime, timezone
 import os
+import sys
 import time
 from typing import List, Tuple
 import urllib.error
@@ -116,6 +118,7 @@ def fetch_guild_data(cache_dir: str = "cache", ttl: int = 3600, retries: int = 3
         results[name] = df
 
     return results["Alliances"], results["SoloGuilds"]
+
 
 def fetch_guild_data_local(alliances_file: str = "WvW Guilds - Alliances.csv",
                            solo_file: str = "WvW Guilds - SoloGuilds.csv"):
@@ -252,7 +255,6 @@ def post_embeds_and_get_links(webhook_url: str, guild_id: str, world_name: str, 
     return first_link
 
 
-
 def build_summary_embed(world_links: dict) -> dict:
     """Build a summary embed linking to the *first* message of each world."""
     lines = [f"[{world}]({link})" for world, link in world_links.items()]
@@ -263,17 +265,41 @@ def build_summary_embed(world_links: dict) -> dict:
     }
 
 
-if __name__ == "__main__":
-
+def main():
+    # Read config
     config_ini = configparser.ConfigParser()
     config_ini.read("config.ini")
 
     WEBHOOK_URL = config_ini["Settings"]["WEBHOOK_URL"]
     GUILD_ID = config_ini["Settings"]["GUILD_ID"]
-    
+
+    parser = argparse.ArgumentParser(
+        description="Process WvW guild data and generate Discord embeds.\n\n "
+        "The --remote and --local flags are mutually exclusive.",
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+
+    # Mutually exclusive: remote OR local
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--remote", action="store_true", help="Gather Alliance data and Guild from google sheets")
+    group.add_argument("--local", action="store_true", help="Gather Alliance data and Guild from local csv files")
+
+    args = parser.parse_args()
+
     world_links = {}
 
-    alliances, solo_guilds = fetch_guild_data_local()
+    
+    if not any(vars(args).values()):
+        parser.print_help(sys.stderr)
+        sys.exit(1)
+
+    if args.remote:
+        #pull data from google sheets
+        alliances, solo_guilds = fetch_guild_data()
+    elif args.local:
+        #read data from local files
+        alliances, solo_guilds = fetch_guild_data_local()        
+
     clean_solo_guilds = solo_guilds.dropna()
     clean_alliances = alliances.dropna()
     sorted_alliances = clean_alliances.sort_values(by=['World ID', 'Alliance:'], ascending=[True, True])
@@ -291,4 +317,8 @@ if __name__ == "__main__":
 
     # Post the summary embed
     summary = build_summary_embed(world_links)
-    requests.post(WEBHOOK_URL, json={"embeds": [summary]})
+    requests.post(WEBHOOK_URL, json={"embeds": [summary]})        
+
+
+if __name__ == "__main__":
+    main()
