@@ -43,6 +43,38 @@ def fetch_north_american_guilds() -> dict:
         return None
     
 
+def detect_world_changes(prev_data: dict, curr_data: dict) -> dict:
+    """
+    Detect changes in world assignments, including new and missing guilds.
+
+    Returns:
+        dict with keys: 'changed', 'new', 'removed'
+    """
+    changes = {
+        "changed": {},
+        "new": {},
+        "removed": {}
+    }
+
+    # Detect changed and new guilds
+    for guild_id, new_world in curr_data.items():
+        old_world = prev_data.get(guild_id)
+        if old_world is None:
+            changes["new"][guild_id] = new_world
+        elif old_world != new_world:
+            changes["changed"][guild_id] = {
+                "from": old_world,
+                "to": new_world
+            }
+
+    # Detect removed guilds
+    for guild_id, old_world in prev_data.items():
+        if guild_id not in curr_data:
+            changes["removed"][guild_id] = old_world
+
+    return changes
+
+
 def fetch_match_data(match: str) -> dict:
     """
     Fetch match data for a given tier from GW2API.
