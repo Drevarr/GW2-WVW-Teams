@@ -6,6 +6,7 @@ import sys
 import time
 from typing import List, Tuple, Dict, Union
 import json
+from urllib.parse import urlparse
 import urllib.error
 
 import pandas as pd
@@ -362,16 +363,27 @@ def post_summary_embed(webhook_url: str, guild_id: str, summary: dict, msg_links
     return msg_links
 
 
-def delete_previous_discord_msgs_for_world_links(cache_file: str) -> None:
+def delete_previous_discord_msgs_for_world_links(WEBHOOK_URL: str, cache_file: str) -> None:
     """Retrieve cached links and send DELETE requests for each."""
     world_links = load_data_file(cache_file)
     for world_name, link in world_links.items():
         try:
-            resp = requests.delete(link, timeout=10)
+            parts = urlparse(link).path.strip("/").split("/")
+            if len(parts) < 4 or parts[0] != "channels":
+                print(f"⚠️ Invalid UI link format for {world_name}: {link}")
+                continue
+
+            message_id = parts[-1]  # last element is the message_id
+
+            delete_url = f"{WEBHOOK_URL}/messages/{message_id}"
+            resp = requests.delete(delete_url, timeout=10)
+            time.sleep(0.5)
+
             if resp.status_code in (200, 204):
                 print(f"✅ Deleted link for {world_name}: {link}")
             else:
                 print(f"⚠️ Failed to delete {world_name}: {resp.status_code} {resp.text}")
+
         except requests.RequestException as e:
             print(f"❌ Error deleting {world_name}: {e}")
 
