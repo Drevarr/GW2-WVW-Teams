@@ -333,9 +333,9 @@ def build_summary_embed(world_links: dict) -> dict:
 
 
 
-def delete_previous_discord_msgs_for_world_links(cache_file: str = CACHE_FILE) -> None:
+def delete_previous_discord_msgs_for_world_links(cache_file: str) -> None:
     """Retrieve cached links and send DELETE requests for each."""
-    world_links = load_world_links(cache_file)
+    world_links = load_data_file(cache_file)
     for world_name, link in world_links.items():
         try:
             resp = requests.delete(link, timeout=10)
