@@ -332,6 +332,35 @@ def build_summary_embed(world_links: dict) -> dict:
     }
 
 
+def post_summary_embed(webhook_url: str, guild_id: str, summary: dict, msg_links: dict) -> dict:
+    """
+    Post a summary embed to Discord and update the message links dictionary.
+
+    Args:
+        webhook_url (str): URL of the Discord webhook.
+        guild_id (str): ID of the Discord guild.
+        summary (dict): Summary embed data.
+        msg_links (dict): Dictionary of world names to message links.
+
+    Returns:
+        dict: Updated message links dictionary.
+    """
+    # Append "?wait=true" to the webhook URL if not already present
+    if not webhook_url.endswith("?wait=true"):
+        webhook_url = webhook_url + "?wait=true"    
+
+    # Post the summary embed to Discord
+    resp = requests.post(webhook_url, json={"embeds": [summary]})
+    data = resp.json()
+    message_id = data["id"]
+    channel_id = data["channel_id"]
+
+    # Construct the summary message link
+    summary_url = f"https://discord.com/channels/{guild_id}/{channel_id}/{message_id}"
+    # Update the message links dictionary
+    msg_links["Summary"] = summary_url
+    return msg_links
+
 
 def delete_previous_discord_msgs_for_world_links(cache_file: str) -> None:
     """Retrieve cached links and send DELETE requests for each."""
@@ -399,13 +428,9 @@ def main():
 
     # Post the summary embed
     summary = build_summary_embed(world_links)
-    resp = requests.post(WEBHOOK_URL, json={"embeds": [summary]})
-    data = resp.json()
-    message_id = data["id"]
-    channel_id = data["channel_id"]
-    summary_url = f"https://discord.com/channels/{GUILD_ID}/{channel_id}/{message_id}"
-    world_links["summary"] = summary_url
-
+    previous_discord_messages = post_summary_embed(WEBHOOK_URL, GUILD_ID, summary, world_links)
+    #save discord messages to cache file for reference on future deletions
+    cache_data_file(previous_discord_messages, "previous_discord_messages.json")
 
 
 if __name__ == "__main__":
