@@ -15,6 +15,40 @@ import requests
 MAX_FIELD_CHARS = 1024
 
 
+def cache_data_file(data: Union[Dict[str, str], pd.DataFrame], cache_file: str) -> None:
+    """Cache the data dictionary or dataframe to a JSON file."""
+    if isinstance(data, pd.DataFrame):
+        # store as records with meta info
+        payload = {
+            "_type": "dataframe",
+            "data": data.to_dict(orient="records"),
+            "columns": data.columns.tolist(),
+        }
+    elif isinstance(data, dict):
+        payload = {"_type": "dict", "data": data}
+    else:
+        raise TypeError(f"Unsupported type {type(data)}")
+
+    with open(cache_file, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+
+
+def load_data_file(cache_file: str) -> Dict[str, str]:
+    """Load the cached data dictionary or dataframe from JSON file."""
+    if not os.path.exists(cache_file):
+        return None
+
+    with open(cache_file, "r", encoding="utf-8") as f:
+        payload = json.load(f)
+
+    if payload["_type"] == "dataframe":
+        return pd.DataFrame(payload["data"], columns=payload["columns"])
+    elif payload["_type"] == "dict":
+        return payload["data"]
+    else:
+        return payload["data"]
+    
+
 def fetch_north_american_guilds() -> dict:
     """
     Fetch the listing of North American Guilds from the Guild Wars 2 API.
