@@ -4,7 +4,8 @@ from datetime import datetime, timezone
 import os
 import sys
 import time
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Union
+import json
 import urllib.error
 
 import pandas as pd
@@ -297,6 +298,21 @@ def build_summary_embed(world_links: dict) -> dict:
     }
 
 
+
+def delete_previous_discord_msgs_for_world_links(cache_file: str = CACHE_FILE) -> None:
+    """Retrieve cached links and send DELETE requests for each."""
+    world_links = load_world_links(cache_file)
+    for world_name, link in world_links.items():
+        try:
+            resp = requests.delete(link, timeout=10)
+            if resp.status_code in (200, 204):
+                print(f"✅ Deleted link for {world_name}: {link}")
+            else:
+                print(f"⚠️ Failed to delete {world_name}: {resp.status_code} {resp.text}")
+        except requests.RequestException as e:
+            print(f"❌ Error deleting {world_name}: {e}")
+
+
 def main():
     # Read config
     config_ini = configparser.ConfigParser()
@@ -349,7 +365,13 @@ def main():
 
     # Post the summary embed
     summary = build_summary_embed(world_links)
-    requests.post(WEBHOOK_URL, json={"embeds": [summary]})        
+    resp = requests.post(WEBHOOK_URL, json={"embeds": [summary]})
+    data = resp.json()
+    message_id = data["id"]
+    channel_id = data["channel_id"]
+    summary_url = f"https://discord.com/channels/{GUILD_ID}/{channel_id}/{message_id}"
+    world_links["summary"] = summary_url
+
 
 
 if __name__ == "__main__":
