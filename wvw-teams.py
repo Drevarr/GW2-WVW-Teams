@@ -450,7 +450,7 @@ def main():
         filtered_alliances = sorted_alliances.loc[sorted_alliances['World ID'] == world_name]
         filtered_solo_guilds = sorted_solo_guilds.loc[sorted_solo_guilds['World'] == world_name]
         embeds = build_guild_embeds(world_name, filtered_alliances, filtered_solo_guilds)
-        link = post_embeds_and_get_links(WEBHOOK_URL, GUILD_ID, world_name, embeds)
+        link = post_embeds_and_get_links(WEBHOOK_URL, GUILD_ID, embeds)
         world_links[world_name] = link
         time.sleep(0.5)
 
