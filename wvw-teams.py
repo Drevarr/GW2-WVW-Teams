@@ -303,29 +303,34 @@ def safe_post(webhook_url, payload):
         return resp
     
 
-def post_embeds_and_get_links(webhook_url: str, guild_id: str, world_name: str, embeds: list) -> str:
+def post_embeds_and_get_links(webhook_url: str, guild_id: str, embeds: list) -> list[str]:
     """
-    Post embeds for one world and return the *first* message link.
-    If multiple embeds are posted, only the first link is returned.
+    Post embeds for one world and return a list of message links.
+    The first item in the list will always be the first message link.
     """
     if not webhook_url.endswith("?wait=true"):
         webhook_url = webhook_url + "?wait=true"
-            
-    first_link = None
+
+    links = []
     for embed in embeds:
         resp = requests.post(webhook_url, json={"embeds": [embed]})
+        resp.raise_for_status()  # good practice
         data = resp.json()
         message_id = data["id"]
         channel_id = data["channel_id"]
         jump_url = f"https://discord.com/channels/{guild_id}/{channel_id}/{message_id}"
-        if not first_link:
-            first_link = jump_url
-    return first_link
+        links.append(jump_url)
+
+    return links
 
 
 def build_summary_embed(world_links: dict) -> dict:
     """Build a summary embed linking to the *first* message of each world."""
-    lines = [f"[{world}]({link})" for world, link in world_links.items()]
+    lines = [
+        f"[{world}]({links[0]})"
+        for world, links in world_links.items()
+        if links
+    ]
     return {
         "title": "WvW Guild Lists Summary",
         "description": "\n".join(lines),
@@ -365,28 +370,36 @@ def post_summary_embed(webhook_url: str, guild_id: str, summary: dict, msg_links
 
 def delete_previous_discord_msgs_for_world_links(WEBHOOK_URL: str, cache_file: str) -> None:
     """Retrieve cached links and send DELETE requests for each."""
+    if not os.path.exists(cache_file):
+        print(f"⚠️ Prior Message link file {cache_file} not found. Skipping...")
+        return
+
     world_links = load_data_file(cache_file)
-    for world_name, link in world_links.items():
-        try:
-            parts = urlparse(link).path.strip("/").split("/")
-            if len(parts) < 4 or parts[0] != "channels":
-                print(f"⚠️ Invalid UI link format for {world_name}: {link}")
-                continue
 
-            message_id = parts[-1]  # last element is the message_id
+    for world_name, links in world_links.items():
+        if not isinstance(links, list):
+            links = [links]  # backward compatibility if cache still has single strings
 
-            delete_url = f"{WEBHOOK_URL}/messages/{message_id}"
-            resp = requests.delete(delete_url, timeout=10)
-            time.sleep(0.5)
+        for link in links:
+            try:
+                parts = urlparse(link).path.strip("/").split("/")
+                if len(parts) < 4 or parts[0] != "channels":
+                    print(f"⚠️ Invalid UI link format for {world_name}: {link}")
+                    continue
 
-            if resp.status_code in (200, 204):
-                print(f"✅ Deleted link for {world_name}: {link}")
-            else:
-                print(f"⚠️ Failed to delete {world_name}: {resp.status_code} {resp.text}")
+                message_id = parts[-1]  # last element is the message_id
+                delete_url = f"{WEBHOOK_URL}/messages/{message_id}"
 
-        except requests.RequestException as e:
-            print(f"❌ Error deleting {world_name}: {e}")
+                resp = requests.delete(delete_url, timeout=10)
+                time.sleep(0.5)
 
+                if resp.status_code in (200, 204):
+                    print(f"✅ Deleted link for {world_name}: {link}")
+                else:
+                    print(f"⚠️ Failed to delete {world_name}: {resp.status_code} {resp.text}")
+
+            except requests.RequestException as e:
+                print(f"❌ Error deleting {world_name}: {e}")
 
 def main():
     # Read config
@@ -429,7 +442,10 @@ def main():
     sorted_solo_guilds = clean_solo_guilds.sort_values(by=['World', 'Solo Guilds'], ascending=[True, True])
     world_list = sorted_alliances['World ID'].unique().tolist()
 
-    #build_discord_embeds(sorted_alliances, sorted_solo_guilds)
+    #delete discord messages for each world if previous file exists
+    delete_previous_discord_msgs_for_world_links(WEBHOOK_URL, "previous_discord_messages.json")
+
+    #build_discord_embeds
     for world_name in world_list:
         filtered_alliances = sorted_alliances.loc[sorted_alliances['World ID'] == world_name]
         filtered_solo_guilds = sorted_solo_guilds.loc[sorted_solo_guilds['World'] == world_name]
