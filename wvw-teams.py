@@ -50,33 +50,35 @@ def load_data_file(cache_file: str) -> Dict[str, str]:
         return payload["data"]
     
 
-def fetch_north_american_guilds() -> dict:
+def fetch_north_american_guilds() -> pd.DataFrame:
     """
     Fetch the listing of North American Guilds from the Guild Wars 2 API.
 
     The GW2API is queried for the list of North American Guilds. The response is
-    parsed as JSON and returned as a Python dictionary.
+    parsed as JSON and returned as a pandas DataFrame.
 
     Parameters:
         None
 
     Returns:
-        dict: The list of North American Guilds as returned by the GW2API.
+        pd.DataFrame: A DataFrame with columns ['guild_id', 'world_id'].
     """
     url = "https://api.guildwars2.com/v2/wvw/guilds/na"
     try:
-        # Send a GET request to the GW2API with a timeout of 3.0 seconds
+        # Send a GET request to the GW2API with a timeout
         response = requests.get(url, timeout=(3.0, 5))
-        # Raise an exception for bad status codes
         response.raise_for_status()
-        # Parse the JSON response
+
+        # Parse the JSON into a dict
         data = response.json()
-        return data
-        
+
+        # Convert to DataFrame
+        guilds_df = pd.DataFrame(list(data.items()), columns=["guild_id", "world_id"])
+        return guilds_df
+
     except requests.exceptions.RequestException as error:
-        # Print an error message if the request fails
         print(f"Error: {error}")
-        return None
+        return pd.DataFrame(columns=["guild_id", "world_id"])
     
 
 def detect_world_changes(prev_data: dict, curr_data: dict) -> dict:
