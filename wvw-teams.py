@@ -204,36 +204,105 @@ def fetch_guild_data_local(alliances_file: str = "WvW Guilds - Alliances.csv",
     return alliances, solo_guilds
 
 
-def update_world_ids(alliances_df: pd.DataFrame, solo_guilds_df: pd.DataFrame, guild_world_ids: dict) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def test_update_world_ids(
+    alliances_df: pd.DataFrame,
+    solo_guilds_df: pd.DataFrame,
+    guild_world_ids: pd.DataFrame,
+    world_id_map: Dict[int, str],
+    alliance_id_col: str = 'Alliance Guild IDs:',
+    alliance_name_col: str = 'Alliance:',
+    alliance_world_col: str = 'World ID',
+    solo_id_col: str = 'Guild API ID',
+    solo_world_col: str = 'World'
+) -> Tuple[pd.DataFrame, pd.DataFrame, Dict[str, str], Dict[str, str]]:
     """
-    Updates the world IDs in the alliances and solo guilds dataframes
-    based on the latest world ID mapping from the Guild Wars 2 API.
+    Updates world IDs in alliances and solo guilds DataFrames based on the latest world ID mapping.
 
     Args:
-        alliances_df (pd.DataFrame): DataFrame containing alliances data.
-        solo_guilds_df (pd.DataFrame): DataFrame containing solo guilds data.
-        guild_world_ids (dict): Dictionary containing the latest world ID mapping.
+        alliances_df (pd.DataFrame): DataFrame with alliances data.
+        solo_guilds_df (pd.DataFrame): DataFrame with solo guilds data.
+        guild_world_ids (pd.DataFrame): DataFrame with guild_id and world_id columns.
+        world_id_map (Dict[int, str]): Mapping of world IDs to world names.
+        alliance_id_col (str): Column name for alliance guild IDs.
+        alliance_name_col (str): Column name for alliance names.
+        alliance_world_col (str): Column name for alliance world IDs.
+        solo_id_col (str): Column name for solo guild IDs.
+        solo_world_col (str): Column name for solo guild world IDs.
 
     Returns:
-        Tuple[pd.DataFrame, pd.DataFrame]: Updated dataframes for alliances and solo guilds.
+        Tuple[pd.DataFrame, pd.DataFrame, Dict[str, str], Dict[str, str]]: Updated DataFrames and
+        dictionaries tracking changed and unchanged world assignments.
+
+    Raises:
+        ValueError: If required columns are missing or inputs are invalid.
     """
-    for index, row in alliances_df.iterrows():
-        alliance_id = row['Alliance Guild IDs:'].upper()
-        current_world_id = row['World ID']
-        new_world_id = guild_world_ids.get(alliance_id, "Unknown")
+    # Validate inputs
+    required_cols = {
+        'alliances_df': [alliance_id_col, alliance_name_col, alliance_world_col],
+        'solo_guilds_df': [solo_id_col, solo_world_col],
+        'guild_world_ids': ['guild_id', 'world_id']
+    }
+    for df_name, cols in required_cols.items():
+        df = locals()[df_name]
+        if not all(col in df.columns for col in cols):
+            raise ValueError(f"{df_name} missing required columns: {cols}")
 
-        if new_world_id != current_world_id:
-            alliances_df.at[index, 'World ID'] = new_world_id
+    changed = {}
+    unchanged = {}
 
-    for index, row in solo_guilds_df.iterrows():
-        guild_id = row['Guild API ID'].upper()
-        current_world_id = row['World']
-        new_world_id = guild_world_ids.get(guild_id, "Unknown")
+    # Normalize guild IDs to uppercase
+    alliances_df = alliances_df.copy()
+    solo_guilds_df = solo_guilds_df.copy()
+    guild_world_ids = guild_world_ids.copy()
+    guild_world_ids['guild_id'] = guild_world_ids['guild_id'].str.upper()
+    alliances_df[alliance_id_col] = alliances_df[alliance_id_col].str.upper()
+    solo_guilds_df[solo_id_col] = solo_guilds_df[solo_id_col].str.upper()
 
-        if new_world_id != current_world_id:
-            solo_guilds_df.at[index, 'World'] = new_world_id
+    # Update alliances_df
+    alliances_df = alliances_df.merge(
+        guild_world_ids[['guild_id', 'world_id']],
+        how='left',
+        left_on=alliance_id_col,
+        right_on='guild_id'
+    )
+    alliances_df['new_world_name'] = alliances_df['world_id'].map(world_id_map).fillna("")
+    
+    # Track changes for alliances
+    for _, row in alliances_df.iterrows():
+        alliance_name = row[alliance_name_col]
+        current_world = row[alliance_world_col]
+        new_world = row['new_world_name']
+        if new_world and new_world != current_world:
+            changed[alliance_name] = f"Moved from {current_world} to {new_world}"
+            alliances_df.loc[alliances_df[alliance_name_col] == alliance_name, alliance_world_col] = new_world
+        else:
+            unchanged[alliance_name] = f"Remained on {current_world or new_world}"
 
-    return alliances_df, solo_guilds_df
+    # Update solo_guilds_df
+    solo_guilds_df = solo_guilds_df.merge(
+        guild_world_ids[['guild_id', 'world_id']],
+        how='left',
+        left_on=solo_id_col,
+        right_on='guild_id'
+    )
+    solo_guilds_df['new_world_name'] = solo_guilds_df['world_id'].map(world_id_map).fillna("")
+    
+    # Track changes for solo guilds
+    for _, row in solo_guilds_df.iterrows():
+        guild_id = row[solo_id_col]
+        current_world = row[solo_world_col]
+        new_world = row['new_world_name']
+        if new_world and new_world != current_world:
+            changed[guild_id] = f"Moved from {current_world} to {new_world}"
+            solo_guilds_df.loc[solo_guilds_df[solo_id_col] == guild_id, solo_world_col] = new_world
+        else:
+            unchanged[guild_id] = f"Remained on {current_world or new_world}"
+
+    # Clean up temporary columns
+    alliances_df = alliances_df.drop(columns=['guild_id', 'world_id', 'new_world_name'], errors='ignore')
+    solo_guilds_df = solo_guilds_df.drop(columns=['guild_id', 'world_id', 'new_world_name'], errors='ignore')
+
+    return alliances_df, solo_guilds_df, changed, unchanged
 
 
 def build_guild_embeds(world_name: str, alliances: pd.DataFrame, solo_guilds: pd.DataFrame) -> List[dict]:
