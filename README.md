@@ -33,6 +33,13 @@ The format is:
 https://discord.com/channels/<guild_id>/<channel_id>/<message_id>
 ```
 
+Validate that the links are still valid for remote resources
+
+```py
+ALLIANCES_REMOTE_SHEET_URL
+SOLO_GUILDS_REMOTE_SHEET_URL 
+GW2_NA_GUILDS_API_URL 
+```
 ---
 
 ### 2. Install Dependencies
