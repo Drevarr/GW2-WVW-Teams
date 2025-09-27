@@ -9,6 +9,7 @@ import json
 from urllib.parse import urlparse
 import urllib.error
 
+import gw2_data
 import pandas as pd
 import requests
 
@@ -305,6 +306,60 @@ def update_world_ids(
     return alliances_df, solo_guilds_df, changed, unchanged
 
 
+def compare_cached_to_current(cached_df: pd.DataFrame, current_df: pd.DataFrame) -> dict:
+    """
+    Compare cached and current alliance DataFrames.
+
+    Args:
+        cached_df (pd.DataFrame): Cached alliances with columns ['Alliance:', 'World ID', ...].
+        current_df (pd.DataFrame): Current alliances with same layout.
+
+    Returns:
+        dict: Results containing both details (DataFrames) and counts.
+            {
+                "moved": pd.DataFrame,
+                "new": pd.DataFrame,
+                "removed": pd.DataFrame,
+                "counts": {
+                    "moved": int,
+                    "new": int,
+                    "removed": int
+                }
+            }
+    """
+    # Keep only relevant columns
+    cached = cached_df[["Alliance:", "World ID"]].copy()
+    current = current_df[["Alliance:", "World ID"]].copy()
+
+    # Align on Alliance name
+    merged = cached.merge(
+        current,
+        on="Alliance:",
+        how="outer",
+        suffixes=("_cached", "_current"),
+        indicator=True
+    )
+
+    # Detect differences
+    moved = merged[
+        (merged["_merge"] == "both") &
+        (merged["World ID_cached"] != merged["World ID_current"])
+    ]
+    new = merged[merged["_merge"] == "right_only"]
+    removed = merged[merged["_merge"] == "left_only"]
+
+    return {
+        "moved": moved,
+        "new": new,
+        "removed": removed,
+        "counts": {
+            "moved": moved.shape[0],
+            "new": new.shape[0],
+            "removed": removed.shape[0],
+        }
+    }
+
+
 def build_guild_embeds(world_name: str, alliances: pd.DataFrame, solo_guilds: pd.DataFrame) -> List[dict]:
     """Build embeds for a world, auto-splitting alliances if too long."""
     alliance_blocks = []
@@ -494,7 +549,7 @@ def main():
     args = parser.parse_args()
 
     world_links = {}
-
+    world_id_map = gw2_data.NA_wvw_teams
     
     if not any(vars(args).values()):
         parser.print_help(sys.stderr)
@@ -511,36 +566,53 @@ def main():
     clean_alliances = alliances.dropna()
     sorted_alliances = clean_alliances.sort_values(by=['World ID', 'Alliance:'], ascending=[True, True])
     sorted_solo_guilds = clean_solo_guilds.sort_values(by=['World', 'Solo Guilds'], ascending=[True, True])
-    world_list = sorted_alliances['World ID'].unique().tolist()
+    
+    guild_world_ids = fetch_north_american_guilds()
+    world_list = guild_world_ids['World ID'].unique().tolist()
+
+    alliances_df, solo_guilds_df, changed, unchanged = update_world_ids(sorted_alliances, sorted_solo_guilds, guild_world_ids, world_id_map)
 
     #load previous world data:
     cached_Alliances = load_data_file("cached_Alliances")
     cached_Solo_Guilds = load_data_file("cached_Solo_Guilds")
 
     #compare old to new data
-    if cached_Alliances is not None and cached_Solo_Guilds is not None:
-        pass
+    if cached_Alliances is not None:
+        compare_results = compare_cached_to_current(cached_Alliances, alliances_df)
+        print("🌐 Moved alliances:", compare_results["counts"]["moved"])
+        print("➕ New alliances:", compare_results["counts"]["new"])
+        print("❌ Removed alliances:", compare_results["counts"]["removed"])
+        if compare_results["counts"]["moved"] > 0:
+            process_embeds = True
+        else:
+            process_embeds = False
     else:
-        #print("⚠️ No cached data found. Skipping...")
-        
-    #delete discord messages for each world if previous file exists
-    delete_previous_discord_msgs_for_world_links(WEBHOOK_URL, "previous_discord_messages.json")
+        print("⚠️ No cached data found. Skipping comparison and running initial data")
+        process_embeds = True
 
-    #build_discord_embeds
-    for world_name in world_list:
-        filtered_alliances = sorted_alliances.loc[sorted_alliances['World ID'] == world_name]
-        filtered_solo_guilds = sorted_solo_guilds.loc[sorted_solo_guilds['World'] == world_name]
-        embeds = build_guild_embeds(world_name, filtered_alliances, filtered_solo_guilds)
-        link = post_embeds_and_get_links(WEBHOOK_URL, GUILD_ID, embeds)
-        world_links[world_name] = link
-        time.sleep(0.5)
+    if process_embeds:
 
-    # Post the summary embed
-    summary = build_summary_embed(world_links)
-    previous_discord_messages = post_summary_embed(WEBHOOK_URL, GUILD_ID, summary, world_links)
-    #save discord messages to cache file for reference on future deletions
-    cache_data_file(previous_discord_messages, "previous_discord_messages.json")
+        #delete discord messages for each world if previous file exists
+        delete_previous_discord_msgs_for_world_links(WEBHOOK_URL, "previous_discord_messages.json")
 
+        #build_discord_embeds
+        for world_name in world_list:
+            filtered_alliances = sorted_alliances.loc[sorted_alliances['World ID'] == world_name]
+            filtered_solo_guilds = sorted_solo_guilds.loc[sorted_solo_guilds['World'] == world_name]
+            embeds = build_guild_embeds(world_name, filtered_alliances, filtered_solo_guilds)
+            link = post_embeds_and_get_links(WEBHOOK_URL, GUILD_ID, embeds)
+            world_links[world_name] = link
+            time.sleep(0.5)
+
+        # Post the summary embed
+        summary = build_summary_embed(world_links)
+        previous_discord_messages = post_summary_embed(WEBHOOK_URL, GUILD_ID, summary, world_links)
+        #save discord messages to cache file for reference on future deletions
+        cache_data_file(previous_discord_messages, "previous_discord_messages.json")
+        cache_data_file(alliances_df, "cached_Alliances")
+        cache_data_file(solo_guilds_df, "cached_Solo_Guilds")
+    else:
+        print("⚠️ No new data found. Skipping embeds and summary.")
 
 if __name__ == "__main__":
     main()
