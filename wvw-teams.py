@@ -391,8 +391,7 @@ def build_guild_embeds(world_name: str, alliances: pd.DataFrame, solo_guilds: pd
     if embeds:
         world_solo_guilds = []
         for solo_index, solo_row in solo_guilds.iterrows():
-            if solo_row['World'] == world_name:
-                world_solo_guilds.append(solo_row['Solo Guilds'])
+            world_solo_guilds.append(solo_row['Solo Guilds'])
         solo_text = "\n".join(world_solo_guilds) if world_solo_guilds else "None"
         embeds[-1]["fields"].append({"name": "__Solo Guilds__", "value": solo_text})
 
