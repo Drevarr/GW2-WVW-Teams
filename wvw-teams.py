@@ -266,7 +266,7 @@ def update_world_ids(
         left_on=alliance_id_col,
         right_on='guild_id'
     )
-    alliances_df['new_world_name'] = alliances_df['world_id'].map(world_id_map).fillna("")
+    alliances_df['new_world_name'] = alliances_df['world_id'].fillna("")
     
     # Track changes for alliances
     for _, row in alliances_df.iterrows():
@@ -286,7 +286,7 @@ def update_world_ids(
         left_on=solo_id_col,
         right_on='guild_id'
     )
-    solo_guilds_df['new_world_name'] = solo_guilds_df['world_id'].map(world_id_map).fillna("")
+    solo_guilds_df['new_world_name'] = solo_guilds_df['world_id'].fillna("")
     
     # Track changes for solo guilds
     for _, row in solo_guilds_df.iterrows():
@@ -568,7 +568,7 @@ def main():
     sorted_solo_guilds = clean_solo_guilds.sort_values(by=['World', 'Solo Guilds'], ascending=[True, True])
     
     guild_world_ids = fetch_north_american_guilds()
-    world_list = guild_world_ids['World ID'].unique().tolist()
+    world_list = guild_world_ids['world_id'].unique().tolist()
 
     alliances_df, solo_guilds_df, changed, unchanged = update_world_ids(sorted_alliances, sorted_solo_guilds, guild_world_ids, world_id_map)
 
@@ -596,9 +596,9 @@ def main():
         delete_previous_discord_msgs_for_world_links(WEBHOOK_URL, "previous_discord_messages.json")
 
         #build_discord_embeds
-        for world_name in world_list:
-            filtered_alliances = sorted_alliances.loc[sorted_alliances['World ID'] == world_name]
-            filtered_solo_guilds = sorted_solo_guilds.loc[sorted_solo_guilds['World'] == world_name]
+        for world_ID, world_name in world_id_map.items():
+            filtered_alliances = alliances_df.loc[alliances_df['World ID'] == world_ID]
+            filtered_solo_guilds = solo_guilds_df.loc[solo_guilds_df['World'] == world_ID]
             embeds = build_guild_embeds(world_name, filtered_alliances, filtered_solo_guilds)
             link = post_embeds_and_get_links(WEBHOOK_URL, GUILD_ID, embeds)
             world_links[world_name] = link
