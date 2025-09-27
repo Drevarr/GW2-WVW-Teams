@@ -51,7 +51,7 @@ def load_data_file(cache_file: str) -> Dict[str, str]:
         return payload["data"]
     
 
-def fetch_north_american_guilds() -> pd.DataFrame:
+def fetch_north_american_guilds(GW2_NA_GUILDS_API_URL) -> pd.DataFrame:
     """
     Fetch the listing of North American Guilds from the Guild Wars 2 API.
 
@@ -64,7 +64,8 @@ def fetch_north_american_guilds() -> pd.DataFrame:
     Returns:
         pd.DataFrame: A DataFrame with columns ['guild_id', 'world_id'].
     """
-    url = "https://api.guildwars2.com/v2/wvw/guilds/na"
+    url = GW2_NA_GUILDS_API_URL
+
     try:
         # Send a GET request to the GW2API with a timeout
         response = requests.get(url, timeout=(3.0, 5))
@@ -140,7 +141,7 @@ def fetch_match_data(match: str) -> dict:
         return None
 
 
-def fetch_guild_data(cache_dir: str = "cache", ttl: int = 3600, retries: int = 3, delay: float = 2.0):
+def fetch_guild_data(ALLIANCES_REMOTE_SHEET_URL: str, SOLO_GUILDS_REMOTE_SHEET_URL: str, cache_dir: str = "cache", ttl: int = 3600, retries: int = 3, delay: float = 2.0):
     """
     Fetches data from the 'Alliances' and 'SoloGuilds' worksheets of the WvW Guilds Google Spreadsheet.
     Always uses a local cache to avoid hitting Google unnecessarily.
@@ -150,8 +151,8 @@ def fetch_guild_data(cache_dir: str = "cache", ttl: int = 3600, retries: int = 3
     """
     os.makedirs(cache_dir, exist_ok=True)
 
-    alliances_csv_url = "https://docs.google.com/spreadsheets/d/1Txjpcet-9FDVek6uJ0N3OciwgbpE0cfWozUK7ATfWx4/export?format=csv&gid=1120510750"
-    soloGuilds_csv_url = "https://docs.google.com/spreadsheets/d/1Txjpcet-9FDVek6uJ0N3OciwgbpE0cfWozUK7ATfWx4/export?format=csv&gid=768688698"
+    alliances_csv_url = ALLIANCES_REMOTE_SHEET_URL
+    soloGuilds_csv_url = SOLO_GUILDS_REMOTE_SHEET_URL
 
     urls = {
         "Alliances": alliances_csv_url,
@@ -533,6 +534,9 @@ def main():
 
     WEBHOOK_URL = config_ini["Settings"]["WEBHOOK_URL"]
     GUILD_ID = config_ini["Settings"]["GUILD_ID"]
+    GW2_NA_GUILDS_API_URL = config_ini["Settings"]["GW2_NA_GUILDS_API_URL"]
+    ALLIANCES_REMOTE_SHEET_URL = config_ini["Settings"]["ALLIANCES_REMOTE_SHEET_URL"]
+    SOLO_GUILDS_REMOTE_SHEET_URL = config_ini["Settings"]["SOLO_GUILDS_REMOTE_SHEET_URL"]
 
     parser = argparse.ArgumentParser(
         description="Process WvW guild data and generate Discord embeds.\n\n "
@@ -556,7 +560,7 @@ def main():
 
     if args.remote:
         #pull data from google sheets
-        alliances, solo_guilds = fetch_guild_data()
+        alliances, solo_guilds = fetch_guild_data(ALLIANCES_REMOTE_SHEET_URL, SOLO_GUILDS_REMOTE_SHEET_URL)
     elif args.local:
         #read data from local files
         alliances, solo_guilds = fetch_guild_data_local()        
@@ -566,7 +570,7 @@ def main():
     sorted_alliances = clean_alliances.sort_values(by=['World ID', 'Alliance:'], ascending=[True, True])
     sorted_solo_guilds = clean_solo_guilds.sort_values(by=['World', 'Solo Guilds'], ascending=[True, True])
     
-    guild_world_ids = fetch_north_american_guilds()
+    guild_world_ids = fetch_north_american_guilds(GW2_NA_GUILDS_API_URL)
     world_list = guild_world_ids['world_id'].unique().tolist()
 
     alliances_df, solo_guilds_df, changed, unchanged = update_world_ids(sorted_alliances, sorted_solo_guilds, guild_world_ids, world_id_map)
