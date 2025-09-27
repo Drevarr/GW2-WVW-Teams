@@ -204,7 +204,7 @@ def fetch_guild_data_local(alliances_file: str = "WvW Guilds - Alliances.csv",
     return alliances, solo_guilds
 
 
-def test_update_world_ids(
+def update_world_ids(
     alliances_df: pd.DataFrame,
     solo_guilds_df: pd.DataFrame,
     guild_world_ids: pd.DataFrame,
@@ -513,6 +513,16 @@ def main():
     sorted_solo_guilds = clean_solo_guilds.sort_values(by=['World', 'Solo Guilds'], ascending=[True, True])
     world_list = sorted_alliances['World ID'].unique().tolist()
 
+    #load previous world data:
+    cached_Alliances = load_data_file("cached_Alliances")
+    cached_Solo_Guilds = load_data_file("cached_Solo_Guilds")
+
+    #compare old to new data
+    if cached_Alliances is not None and cached_Solo_Guilds is not None:
+        pass
+    else:
+        #print("⚠️ No cached data found. Skipping...")
+        
     #delete discord messages for each world if previous file exists
     delete_previous_discord_msgs_for_world_links(WEBHOOK_URL, "previous_discord_messages.json")
 
